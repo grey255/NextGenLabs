@@ -1,0 +1,22 @@
+all:
+  children:
+    routers:
+      hosts:
+        nglr1:
+          ansible_become_method: enable
+          ansible_connection: ansible.netcommon.network_cli
+          ansible_host: fc00:1a:f:2ed2::2
+          ansible_network_os: cisco.ios.ios
+          become_password: null
+        nglr2:
+          ansible_become_method: enable
+          ansible_connection: ansible.netcommon.network_cli
+          ansible_host: 329e:a2dc:4:5::3:1
+          ansible_network_os: cisco.ios.ios
+          become_password: null
+        nglr3:
+          ansible_become_method: enable
+          ansible_connection: ansible.netcommon.network_cli
+          ansible_host: 329e:a2dc:4:6::3:1
+          ansible_network_os: cisco.ios.ios
+          become_password: null
