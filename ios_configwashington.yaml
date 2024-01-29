@@ -1,0 +1,20 @@
+---
+- name: config washdc using ios_config
+  hosts: washdc
+  tasks:
+    - name: configure hostname
+      cisco.ios.ios_config:
+        lines:
+          - hostname washdc
+      diff_against: startup
+      save_when: modified
+
+    - name: configure interface gig0/0
+      cisco.ios.ios_config:
+        parents: interface gigabitethernet0/0
+        lines:
+           - no ipv6 address
+           - ipv6 address 2001:a:b:c::1/64
+           - description "test interface"
+        diff_against: running
+        save_when: modified

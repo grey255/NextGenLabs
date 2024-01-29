@@ -1,0 +1,63 @@
+#change hostname
+- name: task changes hostname for R1
+  cisco.ios.ios_config:
+    lines:
+      - hostname washdc2
+    diff_against: startup 
+    save_when: modified
+  notify: "savechanges"
+
+#configures interfaces
+- name: configure interfacegig0/0 addresses
+  cisco.ios.ios_config:
+    parents: interface gigabitethernet0/0
+    lines: 
+        - no ipv6 address
+        - shutdown       
+        - ipv6 address 2001:a:b:c::1/64
+        - description "connected to nowhwere"
+  notify: "savechanges"
+
+- name: configure interface gig0/1
+  cisco.ios.ios_config:
+    parents: interface gigabitethernet0/1
+    lines:
+     - shutdown
+     - ipv6 address 329e:a2dc:4:6::3:1/64
+     - ip address 10.2.2.1 255.255.255.252
+     - description "connected to virginia"
+     - no shutdown
+  notify: "savechanges"
+
+- name: configure interface gig0/2
+  cisco.ios.ios_config:
+    parents: interface gigabitethernet0/2
+    lines:
+     - shutdown
+     - ipv6 address 329e:a2dc:4:5::3:2/64
+     - ip address 23.205.1.33 255.255.255.252
+     - description "connected to michigan"
+     - no shutdown
+  notify: "savechanges" 
+
+- name: configure interface gig0/2
+  cisco.ios.ios_config:
+    parents: interface gigabitethernet0/2
+    lines:
+     - shutdown
+     - ipv6 address 329e:a2dc:4:5::3:2/64
+     - ip address 23.205.1.33 255.255.255.252
+     - description "connected to michigan"
+     - no shutdown
+  notify: "savechanges"
+
+- name: configure interface gig0/3
+  cisco.ios.ios_config:
+    parents: interface gigabitethernet0/3
+    lines:
+     - ipv6 address fc00:1a:f:2ed2::2/64
+     - ip address 192.168.1.200 255.255.255.0
+     - description "connected to hn"
+     - no shutdown
+  notify: "savechanges"
+

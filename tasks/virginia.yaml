@@ -1,0 +1,8 @@
+#change hostname for R3 to virginia
+- name: task configures hostname
+  cisco.ios.ios_hostname:
+    config:
+      hostname: virginia
+    state: merged
+  when: inventory_hostname == "virginia"
+

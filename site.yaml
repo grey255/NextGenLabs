@@ -1,0 +1,14 @@
+---
+- name: play configures next gen lab routers
+  hosts: washdc
+  timeout: 40
+  tasks:
+  - name: configure washington dc router
+    ansible.builtin.import_tasks:
+      file: tasks/washdc.yaml
+  handlers:
+    - name: savechanges
+      cisco.ios.ios_command:
+        commands: "write memory"
+      when: ansible_check_mode == false 
+ 
