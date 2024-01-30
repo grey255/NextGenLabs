@@ -1,14 +1,19 @@
 ---
 - name: play configures next gen lab routers
-  hosts: washdc
+  hosts: nglrouters
   timeout: 40
   tasks:
   - name: configure washington dc router
-    ansible.builtin.import_tasks:
+    ansible.builtin.include_tasks:
       file: tasks/washdc.yaml
-  handlers:
-    - name: savechanges
-      cisco.ios.ios_command:
-        commands: "write memory"
-      when: ansible_check_mode == false 
- 
+    when: inventory_hostname == 'washdc'
+
+  - name: configure michigan router
+    ansible.builtin.include_tasks:
+      file: tasks/michigan.yaml
+    when: inventory_hostname == "michigan"
+
+  - name: configure virginia router
+    ansible.builtin.include_tasks:
+      file: tasks/virginia.yaml
+    when: inventory_hostname == "virginia"

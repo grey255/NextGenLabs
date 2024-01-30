@@ -1,8 +1,37 @@
-#change hostname for R3 to virginia
+#display michigan 
+- name: diplay router name
+  ansible.builtin.debug:
+    msg: "Configuring {{ inventory_hostname }}"
+
+
+#change router hostname to virginia
 - name: task configures hostname
-  cisco.ios.ios_hostname:
-    config:
-      hostname: virginia
-    state: merged
-  when: inventory_hostname == "virginia"
+  cisco.ios.ios_config:
+    lines:
+     - hostname {{ inventory_hostname }}
+    diff_against: startup
+    save_when: modified
+
+#remove ip address from gig0/1 virginia
+- name: task removes ip address from gig0/1
+  cisco.ios.ios_config:
+   parents: interface gigabitethernet0/1
+   lines:
+    - no ip address
+    - shutdown
+   diff_against: startup
+   save_when: modified
+
+#configure dual ipv4 ipv6 stack on gig0/2 {{ inventory_hostname }}
+- name: configure interface gig0/2 virginia
+  cisco.ios.ios_config:
+   parents: interface gigabitethernet0/2
+   lines:
+     - ip address 10.2.2.1 255.255.255.252
+     - ipv6 address 329E:A2DC:4:6::3:2/64
+     - description "connects to washdc"
+     - no shutdown
+   diff_against: startup
+   save_when: modified
+
 

@@ -1,11 +1,15 @@
+#display router name 
+- name: diplay router {{ inventory_hostname }}
+  ansible.builtin.debug:
+    msg: "Configuring {{ inventory_hostname }}"
+
 #change hostname
-- name: task changes hostname for R1
+- name: task changes hostname for {{ inventory_hostname }}
   cisco.ios.ios_config:
     lines:
-      - hostname washdc2
+      - hostname {{ inventory_hostname }}
     diff_against: startup 
     save_when: modified
-  notify: "savechanges"
 
 #configures interfaces
 - name: configure interfacegig0/0 addresses
@@ -16,7 +20,8 @@
         - shutdown       
         - ipv6 address 2001:a:b:c::1/64
         - description "connected to nowhwere"
-  notify: "savechanges"
+    diff_against: startup
+    save_when: modified
 
 - name: configure interface gig0/1
   cisco.ios.ios_config:
@@ -27,7 +32,8 @@
      - ip address 10.2.2.1 255.255.255.252
      - description "connected to virginia"
      - no shutdown
-  notify: "savechanges"
+    diff_against: startup
+    save_when: modified
 
 - name: configure interface gig0/2
   cisco.ios.ios_config:
@@ -38,18 +44,8 @@
      - ip address 23.205.1.33 255.255.255.252
      - description "connected to michigan"
      - no shutdown
-  notify: "savechanges" 
-
-- name: configure interface gig0/2
-  cisco.ios.ios_config:
-    parents: interface gigabitethernet0/2
-    lines:
-     - shutdown
-     - ipv6 address 329e:a2dc:4:5::3:2/64
-     - ip address 23.205.1.33 255.255.255.252
-     - description "connected to michigan"
-     - no shutdown
-  notify: "savechanges"
+    diff_against: startup
+    save_when: modified
 
 - name: configure interface gig0/3
   cisco.ios.ios_config:
@@ -59,5 +55,7 @@
      - ip address 192.168.1.200 255.255.255.0
      - description "connected to hn"
      - no shutdown
-  notify: "savechanges"
+    diff_against: startup
+    save_when: modified
+
 
