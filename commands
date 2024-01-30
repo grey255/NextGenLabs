@@ -9,6 +9,10 @@ ansible washdc -m ios_command -a "commands='show ip int brie'"
 #Check rechability of our routers/devices to control node fc00:1a:f:2ed2::1
 ansible nglrouters -m ios_command -a "commands='ping fc00:1a:f:2ed2::2 repeat 20'"
 
+#make encrypted password TopSecret
+ansible-vault encrypt_string --vault-password-file vault_key '@C@s10' --name 'top_secret'
+
+ansible-vault encrypt_string --vault-id grey1@vault_key '@C@s10' --name 'grey1_secret'
 
 
 

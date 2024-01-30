@@ -1,0 +1,33 @@
+---
+- name: play creates user with ssh connections
+  hosts: nglrouters
+  vars_files:
+    - vars/users
+  tasks:
+  - name: create users
+    cisco.ios.ios_user:
+      name: "{{ user_admin }}"
+      configured_password: "{{ grey1_secret }}"
+      sshkey: "{{ lookup('file', 'sshpubkey/sshpubkey') }}"
+      state: present 
+  
+  - name: modify user grey 
+    cisco.ios.ios_user:
+       name: "{{ user_admin0 }}"
+       configured_password: "{{ grey_secret }}"
+       sshkey: "{{ lookup('file', 'sshpubkey/sshpubkey') }}"
+       update_password: on_create
+       state: present
+
+  - name: prohibit password and keyboard login
+    cisco.ios.ios_config:    
+      lines:
+       - no ip ssh server authenticate user keyboard
+       - no ip ssh server authenticate user password
+      diff_against: startup 
+      save_when: modified
+
+  - name: save configuration
+    cisco.ios.ios_command:
+      commands: "write memory"
+
