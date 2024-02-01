@@ -27,11 +27,31 @@
   cisco.ios.ios_config:
    parents: interface gigabitethernet0/2
    lines:
-     - ip address 10.2.2.1 255.255.255.252
+     - ip address 10.2.2.2 255.255.255.252
      - ipv6 address 329E:A2DC:4:6::3:2/64
      - description "connects to washdc"
      - no shutdown
    diff_against: startup
    save_when: modified
 
+#configure dual ipv4 ipv6 stack on gig0/2 {{ inventory_hostname }}
+- name: configure interface gig0/3 virginia
+  cisco.ios.ios_config:
+   parents: interface gigabitethernet0/3
+   lines:
+     - ipv6 address 2233:2ac1:4:cdf8::2/64
+     - description "connects to tennessee"
+     - no shutdown
+   diff_against: startup
+   save_when: modified
+
+#change router hostname to virginia
+- name: task configures hostname
+  cisco.ios.ios_config:
+    lines:
+     - hostname {{ inventory_hostname }}
+     - ipv6 route 9c:2ef9:ab1:7:3::2/64 2233:2ac1:4:cdf8::1
+     - ipv6 route 9fc1:c1:b8:2112::0/64 2233:2ac1:4:cdf8::1
+    diff_against: startup
+    save_when: modified
 
